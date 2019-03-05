@@ -1,0 +1,87 @@
+/**************************************************************
+ *
+ * GROUP #
+ * Group Members:
+ * Date Completed:
+ * Filename: shoppingCart.cpp
+ * 
+ **************************************************************/
+
+#include <iostream>
+#include <ctime>
+#include <sstream>
+#include <vector> 
+#include <fstream>
+
+using namespace std;
+
+struct Address{ 
+			string streetAddress; 
+			string city; 
+			string state; 
+			string zipCode; 
+};
+
+struct Customer{ 
+	string customerNum; 
+	string customerName; 
+	double lineOfCredit; 
+	Address * corperateAddress; 
+};
+
+struct Product{ 
+	int itemNo; 
+	string description; 
+	double price; 
+};
+
+int main(){
+ 
+	return 0;
+}
+
+/**************************************************************
+ *                             parse                          *
+ * Called by: <fill in>                                       *
+ * Passed   : 2 arguments: a string, a character that is the  *
+ *            delimiter                                       *
+ * Purpose  : Split a given string by its delimiter           *
+ * Returns  : String vector                                   *
+ **************************************************************/
+vector<string> parse(string line, char delimiter){
+    
+    vector<string> parsedLine;
+    istringstream stringStream( line ); //create string stream from the line
+    //iterate through the stream
+    while (stringStream)
+    {
+        string s;
+        //uses getline to get the values from the stream before the delimiting character
+        if (getline( stringStream, s, delimiter))
+          parsedLine.push_back(s);
+    }
+    return parsedLine;
+}
+
+/**************************************************************
+ *                  generateOrderNum                          *
+ * Called by: <fill in>                                       *                                    
+ * Purpose  : Generate an order number based on epoch         *
+ * Returns  : String order number                             *
+ **************************************************************/
+
+ string generateOrderNum(){
+    
+    time_t now = time(0); //current time object
+    
+    string oNum;
+    stringstream strstream;
+    
+    strstream << now; //read the date/time in epoch into the string stream
+    strstream >> oNum; //output a string from the string stream
+    return oNum;
+}
+
+
+
+
