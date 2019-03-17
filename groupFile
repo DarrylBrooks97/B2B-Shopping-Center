@@ -54,6 +54,7 @@ int linearSearchInvent(vector<Product>,int);
 string upperCaseIt(string);
 string generateOrderNum();
 void printReceipt(vector<Customer>, vector<Address>, vector<Product>, int,int,int,int);
+int linearSearchAddress(vector<Address>,string);
 	
 int main(){
 	   Customer custObj;
@@ -64,9 +65,9 @@ int main(){
 	   vector<Address>   custAdd;
 	   vector<Product>  custProd;
 	   vector<Memory>    custMem;
-	   int temp,numPos,prodCode,prodPos,quantity,position;
+	   int numPos,prodCode,prodPos,quantity,position,ender=1,number;
 	   string empName,cusName,option;
-	   char choice,choice2;
+	   string choice,choice2,choice3,temp,temp2,temp3;
 	   double total,finalTotal;
 	   double funds;
 	
@@ -81,126 +82,159 @@ int main(){
 	
 	
 	   cout<<"Has a customer placed an order? Y/N:";
-	   cin>>choice;
-	   
-if(choice=='Y' || choice== 'y'){
-		   
-		cout<<"Enter Employee name: ";
-	    cin>>empName;
-		cout<<"Would you like to search customer by Name or Number? ";
-		cin>>option;
-		option=upperCaseIt(option);                                       //Fixes case sensitivity
-			
-			while((option!="NAME") && (option!="NUMBER")){
-			cout<<"Please enter Name or Number"<<endl;
-			cin>>option; 
-			option = upperCaseIt(option);                                 //Fixes case sensitivity
-		   }
-		   if(option=="NAME"){
-			   
-		      cout<<"Enter customer's name: ";
-	          cin>>cusName;
-			  numPos = linearSearch(custInfo,cusName);                    //Searches Customer's file for correct name then returns it's position
-			  
-			  while(numPos==-1){                                          //Keeps asking the user for the correct customer name
-			  cout<<"Name not found"<<endl;  
-			  cout<<"Please try again"<<endl;
-		      cout<<"Enter customer's name: ";
-			  cin>>cusName;
-			  numPos = linearSearch(custInfo,cusName);                    //Searches Customer's file for correct name then returns it's position
-			  }
-			   
-		  } else if(option=="NUMBER"){
-			    cout<<"Enter Customer number: ";
-			    cin>>temp;
-                numPos = binarySearch(custInfo,temp);                     //Searches Customer's file for correct customer number then returns it's position 
-			    
-			    while(numPos==-1){                                        //Keeps asking the user for the correct Customer number
-					cout<<"Customer not found"<<endl;
-					cout<<"Please try again"<<endl;
-					cout<<"Enter Customer number: ";
-					cin>>temp;
-					numPos = binarySearch(custInfo,temp);                 //Searches Customer's file for correct number then returns it's position 
-				}
+	   getline(cin,choice);
+	while( (choice!="Y") && (choice!="y") && (choice!="N") && (choice!="n")  ){
+		cout<<"Incorrect input. Try again"<<endl;
+		cout<<"Has a customer placed an order? Y/N:";
+		getline(cin,choice);
+	}	
+	
+		if(choice=="Y" || choice== "y"){   
 
-		   }
-	           funds=custInfo[numPos].lineOfCredit;                      //Sets funds to how much credit the customer has
-	
-	           cout<<"Would you like add a product? Y/N:";
-	           cin >>choice2;
-if((choice2=='Y') || (choice2=='y')){
-	       while( (choice2=='Y') || (choice2=='y') ){
-				  
-			   
-	           cout<<"Enter Product code: ";
-	           cin>>prodCode;
-	           prodPos=linearSearchInvent(custProd,prodCode);                 //Searches Inventory file for Item then returns it's Position
-	
-	           while(prodPos==-1){                                            //Keeps asking the user for the correct Product number 
-					cout<<"Item not found"<<endl;
-					cout<<"Please try again"<<endl;
-				    cout<<"Enter Product code:";
-					cin>>prodCode;
-					prodPos = linearSearchInvent(custProd,prodCode);          //Searches Inventory file for Item then returns it's Position
-				}
-	         
-	          cout<<"Enter quantity: ";                                       //Lets user enter quantity
-	          cin>>quantity;     
-	          memObj.position=prodPos;                                        //Records where the product is at
-			  memObj.quantity=quantity;                                       //Saves quantity of product 
-			  
-			  memObj.cartTotal=custProd[memObj.position].price * memObj.quantity;
-			  funds-=memObj.cartTotal;
-			  
-	          if(funds<=0){
-				  cout<<"Insuffcient funds"<<endl;                            //Doesn't add the product to memory
-				  funds+=memObj.cartTotal;
-				  
-			  } else {
-				  custMem.push_back(memObj);                                  //Adds the product to memory 
-			  }
-			   
-			   cout<<"Would you like to add another product? Y/N:";
-	           cin >>choice2;
-			  }
-}else{
-	   cout<<"Order Cancelled"<<endl; exit(0);                                      //Customer does not want to order so this ends the program
-}
-	  outF<<"-----------------------------------------------------------"<<endl;
-	  outF<<"B2B Shopping Cart"<<endl;
-	  outF<<"-----------------------------------------------------------"<<endl;
-	  outF<<"Order Number: "<<fileName<<endl;
-	  outF<<"Associate: "<<empName<<endl;
-	  outF<<"Customer Number: "<<custInfo[numPos].customerNum<<endl;
-	  outF<<"Customer: "<<custInfo[numPos].customerName<<endl;
-	  outF<<"Address: "<<custAdd[numPos].streetAddress<<" |"<<endl;
-	  outF<<custAdd[numPos].city<<", "<<custAdd[numPos].state<<" "<<custAdd[numPos].zipCode;
-	  outF<<endl;
-	  outF<<"-----------------------------------------------------------"<<endl;
-	  outF<<"Item No"<<setw(18)<<"Description"<<setw(19)<<"Qty"<<setw(15)<<"Total"<<endl;
-	  outF<<"-----------------------------------------------------------"<<endl;
-	  
-	  for(int k=0;k<custMem.size();k++){
-		  position=custMem[k].position;
-		  finalTotal+=custMem[k].cartTotal;
-		  outF<<custProd[position].itemNo<<setw(33)<<custProd[position].description;
-		  outF<<setw(7)<<custMem[k].quantity<<setw(15)<<"$"<<custMem[k].cartTotal<<endl;
-	  }
-	  outF<<"-----------------------------------------------------------"<<endl;
-	  outF<<"Total"<<setw(54)<<"$"<<finalTotal<<endl;
-	  outF<<"Remaining Credit"<<setw(43)<<"$"<<funds<<endl;    
-          
+				cout<<"Enter Employee name: ";
+				getline(cin,empName);
+				cout<<"Would you like to search customer by Name or Number?:";
+				getline(cin,option);
+				option=upperCaseIt(option);                                       //Fixes case sensitivity
+
+					while((option!="NAME") && (option!="NUMBER")){
+						cout<<"Please enter Name or Number:";
+						getline(cin,option);
+                        option = upperCaseIt(option);                                 //Fixes case sensitivity
+					}
+
+					 if(option=="NAME"){
+					
+						   cout<<"Enter customer's name: ";
+						   getline(cin,cusName);
+						 
+						   numPos = linearSearch(custInfo,cusName);                    //Searches Customer's file for correct name then returns it's position
+                           
+						   while(numPos==-1){                                          //Keeps asking the user for the correct customer name						 
+						   cout<<"Name not found"<<endl;  
+						   cout<<"Please try again"<<endl;
+						   cout<<"Enter customer's name: ";
+						   getline(cin,cusName);
+						   numPos = linearSearch(custInfo,cusName);                    //Searches Customer's file for correct name then returns it's position
+						   }
+						 
+					}else if(option=="NUMBER"){
+						   cout<<"Enter Customer number: ";
+						   getline(cin,temp);
+						   number=atoi(temp.c_str());
+						   numPos = binarySearch(custInfo,number);                     //Searches Customer's file for correct customer number then returns it's position 
+
+						while(numPos==-1){                                        //Keeps asking the user for the correct Customer number
+							cout<<"Customer not found"<<endl;
+							cout<<"Please try again"<<endl;
+							cout<<"Enter Customer number: ";
+							getline(cin,temp);
+							number=atoi(temp.c_str());
+							numPos = binarySearch(custInfo,number);                 //Searches Customer's file for correct number then returns it's position 
+						}
+
+					}
+							funds=custInfo[numPos].lineOfCredit;                      //Sets funds to how much credit the customer has
+																		
+							cout<<"Would you like add a product? Y/N:";
+							getline(cin,choice2);
+			
+                            while( (choice2!="Y") && (choice2!="y") && (choice2!="N") && (choice2!="n")){
+								cout<<"Invalid input. Try again Y/N:";
+								getline(cin,choice2);
+							}
+			
+		if((choice2=="Y") || (choice2=="y")){
+
+				   while(ender){
+
+							cout<<"Enter Product code: ";
+							getline(cin,temp2);
+					        prodCode=atoi(temp2.c_str());
+							prodPos=linearSearchInvent(custProd,prodCode);                  //Searches Inventory file for Item then returns it's Position
+
+				   while(prodPos==-1){                                                      //Keeps asking the user for the correct Product number 
+							cout<<"Item not found"<<endl;
+							cout<<"Please try again"<<endl;
+							cout<<"Enter Product code:";
+							getline(cin,temp2);
+					        prodCode=atoi(temp2.c_str()); 
+							prodPos = linearSearchInvent(custProd,prodCode);                //Searches Inventory file for Item then returns it's Position
+				   }
+
+							cout<<"Enter quantity: ";                                       //Lets user enter quantity
+							getline(cin,temp3);
+					        quantity=atoi(temp3.c_str());
+					        
+					      
+							memObj.position=prodPos;                                        //Records where the product is at
+							memObj.quantity=quantity;                                       //Saves quantity of product 
+
+							memObj.cartTotal=custProd[memObj.position].price * memObj.quantity;
+							funds-=memObj.cartTotal;
+
+					  if(funds<=0){
+							cout<<"Insuffcient funds"<<endl;                            //Doesn't add the product to memory and returns the funds
+							funds+=memObj.cartTotal;
+
+					  }else { 
+							custMem.push_back(memObj);                                  //Adds the product to memory 
+					  }
+				   
+							cout<<"Would you like to add another product? Y/N:";
+							getline(cin,choice3);
+					   
+					        while( (choice3!="Y") && (choice3!="y") && (choice3!="N") && (choice3!="n")  ){
+								cout<<"Incorrect input. Try again"<<endl;
+								cout<<"Would you like to add another product? Y/N:";
+								getline(cin,choice3);
+							}	
+					        if((choice3=="N") || (choice3=="n")) ender=0;
+				   }
+			
+		 } else {
+			cout<<"Order Cancelled"<<endl; exit(0);       //Customer does not want to order so this ends the program                          
+		 }
+			
 } else {
-		   cout<<"Have a nice day"<<endl;
-	   }
+       cout<<"Have a nice day"<<endl; exit(0);       
+}  
+
 	
-	
+		
+			  outF<<"---------------------------------------------------------------"<<endl;
+			  outF<<"B2B Shopping Cart"<<endl;
+			  outF<<"---------------------------------------------------------------"<<endl;
+			  outF<<"Order Number: "<<fileName<<endl;
+			  outF<<"Associate: "<<empName<<endl;
+			  outF<<"Customer Number: "<<custInfo[numPos].customerNum<<endl;
+			  outF<<"Customer: "<<custInfo[numPos].customerName<<endl;
+			  outF<<"Address: "<<custAdd[numPos].streetAddress<<" |"<<endl;
+			  outF<<custAdd[numPos].city<<", "<<custAdd[numPos].state<<" "<<custAdd[numPos].zipCode;
+			  outF<<endl;
+			  outF<<"---------------------------------------------------------------"<<endl;
+			  outF<<"Item No"<<setw(18)<<"Description"<<setw(19)<<"Qty"<<setw(15)<<"Total"<<endl;
+			  outF<<"---------------------------------------------------------------"<<endl;
+
+			  for(int k=0;k<custMem.size();k++){
+				  position=custMem[k].position;
+				  finalTotal+=custMem[k].cartTotal;
+				  outF<<custProd[position].itemNo<<setw(26)<<custProd[position].description;
+				  outF<<setw(7)<<custMem[k].quantity<<setw(11)<<"$"<<custMem[k].cartTotal<<endl;
+			  }
+			  outF<<"---------------------------------------------------------------"<<endl;
+			  outF<<"Total"<<setw(50)<<"$"<<finalTotal<<endl;
+			  outF<<"Remaining Credit"<<setw(39)<<"$"<<funds<<endl<<endl<<endl;
+			  outF<<"THANK YOU FOR SHOPPING WITH B2B"<<endl;
+			     
+
 	outF.close();
 	return 0;
 }
 
 
-void readData(vector<Customer>&addCust,vector<Address>&cAdd,vector<Product>&pAdd,Customer&add,Address&street,Product& product){
+
+void readData(vector<Customer>&addCust, vector<Address>&cAdd, vector<Product>&pAdd, Customer&add, Address&street, Product& product){
 	vector<string> custInfo;
 	vector<string> custAddress;
 	vector<string> custProduct;
@@ -208,8 +242,9 @@ void readData(vector<Customer>&addCust,vector<Address>&cAdd,vector<Product>&pAdd
 	file.open("customers.dat");
 	stock.open("Inventory.dat");
     string line,location,inventory;
+	int check=-1;
 	
-	while(file) {
+	 while(file && stock) {
 		
 		getline(file,line);                           //Gets full lines from customers.dat file
 		custInfo=parse(line,'|');                     //Parse's "line" until it reaches '|'
@@ -220,14 +255,18 @@ void readData(vector<Customer>&addCust,vector<Address>&cAdd,vector<Product>&pAdd
 		add.lineOfCredit=atof(custInfo[2].c_str());   //Needed to convert from string to double then places into Struct member 
 		location=custInfo[3];                         //Adds 3rd parse to a new string so we can parse that string for the Address struct 
 		
+		 
 		custAddress=parse(location,',');              //Parse the location to go into Address struct
 		
 		street.streetAddress=custAddress[0];          //Adds 1st parse to the Struct member 
 		street.city=custAddress[1];                   //Adds 2nd parse to the Struct member 
 		street.state=custAddress[2];                  //Adds 3rd parse to the Struct member 
 		street.zipCode=custAddress[3];                //Adds 4th parse to the Struct member 
-		
 		add.corperateAddress=&street;                 //Object points to another Address
+		
+		check=linearSearchAddress(cAdd,street.streetAddress);     //Checks to see if Address is within vector
+		 
+		
 		
 		getline(stock,inventory);                      //Gets full lines from inventory.dat file
 		custProduct=parse(inventory,',');              //Parse the inventory to go into Product struct
@@ -236,10 +275,11 @@ void readData(vector<Customer>&addCust,vector<Address>&cAdd,vector<Product>&pAdd
 		product.description=custProduct[1];
 		product.price=atof(custProduct[2].c_str());   //Needed to convert from string to double
 		
+		cAdd.push_back(street);
 		addCust.push_back(add);                       //Adding objects into Customer stuct
-		cAdd.push_back(street);                       //Adding objects into Address  struct
 		pAdd.push_back(product);                      //Adding objects into Product  struct 
-	}
+		 
+	 }
 	
 	file.close();                                     //Closes Customers file
 	stock.close();                                    //Closes Inventory file 
@@ -248,8 +288,7 @@ void readData(vector<Customer>&addCust,vector<Address>&cAdd,vector<Product>&pAdd
 void selectionSort(vector<Customer>&cVector,vector<Address>&aVector){     //Sorts the customer vector by customer number
 	
 	int minPos;
-	string minNum,minName;
-	Address *minAdd;
+	string minNum,minName,minAdd,minState,minZip,minCity;
 	double minCred;
 	
 	for(int i=0;i<cVector.size();i++){
@@ -257,7 +296,10 @@ void selectionSort(vector<Customer>&cVector,vector<Address>&aVector){     //Sort
 		minNum=cVector[i].customerNum;
 		minName=cVector[i].customerName;
 		minCred=cVector[i].lineOfCredit;
-		minAdd=cVector[i].corperateAddress;
+		minAdd=cVector[i].corperateAddress->streetAddress;
+		minCity=aVector[i].city;
+		minState=aVector[i].state;
+		minZip=aVector[i].zipCode;
 		
 		for(int k=i;k<cVector.size();k++){
 			if(cVector[minPos].customerNum>cVector[k].customerNum){
@@ -265,20 +307,28 @@ void selectionSort(vector<Customer>&cVector,vector<Address>&aVector){     //Sort
 				minNum=cVector[k].customerNum;  
 				minName=cVector[k].customerName;
 				minCred=cVector[k].lineOfCredit;
-				minAdd=cVector[k].corperateAddress;
-				
-				
+				minAdd=aVector[k].streetAddress;
+				minCity=aVector[k].city;
+				minState=aVector[k].state;
+				minZip=aVector[k].zipCode;
 			}
 		}
 		cVector[minPos].customerNum=cVector[i].customerNum;
 		cVector[minPos].customerName=cVector[i].customerName;
 		cVector[minPos].lineOfCredit=cVector[i].lineOfCredit;
-		cVector[minPos].corperateAddress=cVector[i].corperateAddress;
+		aVector[minPos].streetAddress=aVector[i].streetAddress;
+		aVector[minPos].city=aVector[i].city;
+		aVector[minPos].state=aVector[i].state;
+		aVector[minPos].zipCode=aVector[i].zipCode;
+		
 		
 		cVector[i].customerNum=minNum;
 		cVector[i].customerName=minName;
 		cVector[i].lineOfCredit=minCred;
-		cVector[i].corperateAddress=&minAdd[minPos];
+		aVector[i].streetAddress=minAdd;
+		aVector[i].city=minCity;
+		aVector[i].state=minState;
+		aVector[i].zipCode=minZip;
 	}
 }
 
@@ -302,7 +352,7 @@ int binarySearch(vector<Customer> cVector,int customerNum){   //Searches custome
 
 int linearSearch(vector<Customer> cVector,string name){       //Searches customer objects for correct name
 	
-	int pos=0;
+	int pos=-1;
 	string nameObj,nameSearch;
 	for(int i=0;i<cVector.size();i++){
 		
@@ -315,7 +365,17 @@ int linearSearch(vector<Customer> cVector,string name){       //Searches custome
 	
 	if(pos!=-1) return pos;                              //Sends position of name 
 	else return -1;
-}     
+} 
+
+int linearSearchAddress(vector<Address> aVector,string street){
+	int found=-1;
+	
+	for(int i=0; i<aVector.size(); i++){
+		if(aVector[i].streetAddress==street) return i;
+	}
+	
+	return found;
+}
 
 int linearSearchInvent(vector<Product> cVector,int code){     //Searches inventory objects for correct product numbers 
 	
@@ -382,4 +442,3 @@ string upperCaseIt(string stringIn)         //Used to fix case sensitivity
     
   return upperCase;
 }
-
